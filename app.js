@@ -14,6 +14,7 @@ printer.open();
 
 const ifaces = printer.interfaces;
 const iface = ifaces[0];
+iface.detachKernelDriver();
 iface.claim()
 const ifaceOut = iface.endpoints.find(ep => ep.direction === 'out');
 const ifaceIn = iface.endpoints.find(ep => ep.direction === 'in');
