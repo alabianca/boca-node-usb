@@ -10,52 +10,45 @@ const testFgl = "<NR><RC-10,137><F10><HW1,1>Promoter Presents<RC50,86><F6><HW1,1
 console.log(usb.LIBUSB_TRANSFER_TYPE_BULK)
 
 const printer = devices[0];
-printer.open(false);
+printer.open();
 
+const ifaces = printer.interfaces;
+const iface = ifaces[0];
+iface.claim()
+const ifaceOut = iface.endpoints.find(ep => ep.direction === 'out');
+const ifaceIn = iface.endpoints.find(ep => ep.direction === 'in');
 
-printer.setConfiguration(1, (err) => {
-    if (err) {
-        console.log('config err', err);
-        return
-    }
-    const ifaces = printer.interfaces;
-    const iface = ifaces[0];
-    iface.claim()
-    //console.log(iface)
-    const ifaceOut = iface.endpoints.find(ep => ep.direction === 'out');
-    const ifaceIn = iface.endpoints.find(ep => ep.direction === 'in');
+ifaceIn.timeout = 500
 
-    ifaceIn.timeout = 500
+if (ifaceOut instanceof usb.OutEndpoint) {
+    const data = Buffer.from(testFgl);
+    
+    ifaceOut.transfer(data, (err) => {
+        console.log(ifaceOut.direction)
+        if (err) {
+            console.log("transer error", err);
+            iface.release((err) => {
+                console.log('release error', err);
+                printer.close()
+            });
 
-    if (ifaceOut instanceof usb.OutEndpoint) {
-        const data = Buffer.from(testFgl);
-        
-        ifaceOut.transfer(data, (err) => {
-            console.log(ifaceOut.direction)
-            if (err) {
-                console.log("transer error", err);
+            return
+
+        }
+
+        if (ifaceIn instanceof usb.InEndpoint) {
+            ifaceIn.transfer(4054, (err, data) => {
+
                 iface.release((err) => {
-                    console.log('release error', err);
+                    console.log('release error 2', err);
                     printer.close()
                 });
 
-                return
+                console.log(data)
+            })
+        }
+    });
+}
 
-            }
-
-            if (ifaceIn instanceof usb.InEndpoint) {
-                ifaceIn.transfer(4054, (err, data) => {
-
-                    iface.release((err) => {
-                        console.log('release error 2', err);
-                        printer.close()
-                    });
-
-                    console.log(data)
-                })
-            }
-        });
-    }
-})
 
 
