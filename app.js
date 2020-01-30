@@ -1,4 +1,7 @@
 const usb = require('usb');
+const os = require('os');
+
+console.log(`Trying to print on ${os.platform()} (${os.arch()})`)
 
 const devices = usb.getDeviceList();
 
