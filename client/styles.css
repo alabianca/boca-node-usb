@@ -1,0 +1,26 @@
+.content {
+    height: 210px;
+}
+
+.ip {
+    max-width: 40px;
+}
+
+#port {
+    max-width: 60px;
+}
+
+.content section {
+    padding: 5px
+}
+
+.hidden {
+    display: none;
+}
+
+#printers {
+    padding: 0;
+    max-width: 220px;
+    list-style: none;
+    margin-left: 0;
+}

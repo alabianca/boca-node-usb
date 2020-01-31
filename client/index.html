@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Cryptomaniak</title>
+    <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css">
+    <link rel="stylesheet" href="vendors/photon/dist/css/photon.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="toolbar toolbar-header">
+        <div class="toolbar-actions">
+            <div class="btn-group">
+                <button id="wifi-btn" class="btn btn-mini active">
+                    <span class="icon icon-signal"></span>
+                    <span>Wifi</span>
+                </button>
+                <button id="usb-btn" class="btn btn-mini">
+                    <span class="icon icon-flow-branch"></span>
+                    <span>Usb</span>
+                </button>
+            </div>
+    </header>
+
+    <div class="content">
+        <!--Wifi-->
+        <section id="wifi-content">
+            <div class="form-group">
+                <label style="display: block;">Enter Printer's IP Address</label>
+                <input class="ip" id="ip-0" type="text" class="form-control" placeholder="000">
+                <span>.</span>
+                <input class="ip" id="ip-1" type="text" class="form-control" placeholder="000">
+                <span>.</span>
+                <input class="ip" id="ip-2" type="text" class="form-control" placeholder="000">
+                <span>.</span>
+                <input class="ip" id="ip-3" type="text" class="form-control" placeholder="000">
+        
+                <label style="display: block;">Port</label>
+                <input class="form-control" id="port" type="text" placeholder="9100">
+                <span id="conn-status"></span>
+            </div>
+        </section>
+        <!--Usb-->
+        <section id="usb-content" class="hidden">
+            <ul id="printers" class="list-group">
+            </ul>
+        </section>
+    </div>
+
+    <footer class="toolbar toolbar-footer">
+        <div class="toolbar-actions">
+            <button id="test-conn-btn" class="btn btn-default">
+                Test Connection
+            </button>
+            <button id="wifi-test-print" class="btn btn-primary">Test Print</button>
+
+            <button id="test-print-btn" class="btn btn-primary hidden">
+                Test Print
+            </button>
+        </div>
+    </footer>
+    <script>require('./script.js');</script>
+</body>
+
+</html>
