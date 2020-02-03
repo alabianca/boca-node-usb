@@ -4,9 +4,16 @@ const usbF = require('../lib/print-usb-manager');
 const wifi = require('../lib/print-wifi-manager');
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
 
-app.use(bodyParser.json());
+
 
 // listen for requests
-api(app, usbF(usb), wifi());
+const app = api(usbF(usb), wifi());
+app.server(express);
+app.middlewares((app) => {
+    app.use(bodyParser.json())
+});
+
+app.listen(3000, () => {
+    console.log('listening')
+})

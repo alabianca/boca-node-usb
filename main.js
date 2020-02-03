@@ -30,8 +30,16 @@ app.on('ready', () => {
 
 
 const main = () => {
-    expressApp.use(bodyParser.json());
-    api(expressApp, printManager, wifiManager);
+
+    const app = api(printManager, wifiManager);
+    app.server(express);
+    app.middlewares((app) => {
+        app.use(bodyParser.json())
+    });
+
+    app.listen(3000, () => {
+        console.log('listening...')
+    })
 }
 
 
