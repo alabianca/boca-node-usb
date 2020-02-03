@@ -1,9 +1,10 @@
 const { app, BrowserWindow, ipcMain, Tray } = require('electron');
 const path = require('path');
-const usb = require('./lib/print-usb-manager');
+const usbF = require('./lib/print-usb-manager');
 const wifi = require('./lib/print-wifi-manager');
 const api = require('./lib/api');
-const printManager = usb();
+const usb = require('usb');
+const printManager = usbF(usb);
 const wifiManager = wifi();
 
 
@@ -26,21 +27,6 @@ app.on('ready', () => {
 
 const main = () => {
     api(printManager, wifiManager);
-    // ipcMain.on(GET_PRINTERS, () => {
-    //     const devices = printManager.getDeviceList();
-    //     window.send(ON_PRINTERS, devices)
-    // });
-
-    // ipcMain.on(TEST_PRINT, async (ipc, index) => {
-    //     printManager.open(index);
-    //     try {
-    //         const res = await printManager.print("<NR><RC-10,137><F10><HW1,1>Promoter Presents<RC50,86><F6><HW1,1>Title 1<RC100,86><F6><HW1,1>Title 2<RC175,325><F2><HW1,1>Venue Name<RC190,175><F2><HW1,1>Street Address City, ST<RC210,-45><F2><HW2,2>WKDAY MONTH DAY, YEAR*DOORS/SHOW HOURAM/PM <RC240,75><F2><HW2,2>Age Policy / General Admission<RC280,375><F2><HW1,1><RC325,375><F5><HW1,1><RC345,375><F5><HW1,1><p>")
-    //         window.send(TEST_PRINT_RESULT, res);
-    //     } catch(e) {
-    //         window.send(TEST_PRINT_ERROR, e);
-    //     }
-        
-    // })
 }
 
 
