@@ -1,5 +1,9 @@
 const { app, BrowserWindow, ipcMain, Tray } = require('electron');
 const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const expressApp = express();
+
 const usbF = require('./lib/print-usb-manager');
 const wifi = require('./lib/print-wifi-manager');
 const api = require('./lib/api');
@@ -26,7 +30,8 @@ app.on('ready', () => {
 
 
 const main = () => {
-    api(printManager, wifiManager);
+    expressApp.use(bodyParser.json());
+    api(expressApp, printManager, wifiManager);
 }
 
 
