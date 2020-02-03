@@ -7,48 +7,55 @@ const testFgl = "<NR><RC-10,137><F10><HW1,1>Promoter Presents<RC50,86><F6><HW1,1
     "<RC240,75><F2><HW2,2>Age Policy / General Admission<RC280,375><F2><HW1,1><RC325,375><F5><HW1,1><RC345,375><F5><HW1,1><p>";
 
 
-console.log(usb.LIBUSB_TRANSFER_TYPE_BULK)
 
 const printer = devices[0];
+
+
+
 printer.open();
 
-const ifaces = printer.interfaces;
-const iface = ifaces[0];
-iface.claim()
-const ifaceOut = iface.endpoints.find(ep => ep.direction === 'out');
-const ifaceIn = iface.endpoints.find(ep => ep.direction === 'in');
+printer.setConfiguration(1, (err) => {
+    if (err) {
+        console.log(err);
+        return;
+    }
+    console.log(printer.interfaces.length)
+    const iface = printer.interfaces[0];
+    iface.claim()
+    const out = iface.endpoints.find((e) => e.direction === 'out');
+    const ein = iface.endpoints.find((e) => e.direction = 'in');
 
-ifaceIn.timeout = 500
+    if (out instanceof usb.OutEndpoint) {
+        out.transfer(Buffer.from(testFgl), (err) => {
+            if (err) {
+                console.log("OUT", err);
+                return
+            }
 
-if (ifaceOut instanceof usb.OutEndpoint) {
-    const data = Buffer.from(testFgl);
+            if (ein instanceof usb.InEndpoint) {
+                ein.transfer(4054, (err) => {
+                    if (err) {
+                        console.log("IN", err);
+                        return;
+                    }
+
+
+                })
+            }
+        })
+    }
     
-    ifaceOut.transfer(data, (err) => {
-        console.log(ifaceOut.direction)
-        if (err) {
-            console.log("transer error", err);
-            iface.release((err) => {
-                console.log('release error', err);
-                printer.close()
-            });
+})
 
-            return
 
-        }
 
-        if (ifaceIn instanceof usb.InEndpoint) {
-            ifaceIn.transfer(4054, (err, data) => {
 
-                iface.release((err) => {
-                    console.log('release error 2', err);
-                    printer.close()
-                });
 
-                console.log(data)
-            })
-        }
-    });
-}
+// printer.controlTransfer(usb.libusb_r)
+// console.log(usb.LIBUSB_RECIPIENT_DEVICE.toString(2))
+// console.log(usb.LIBUSB_REQUEST_TYPE_VENDOR.toString(2));
+// console.log(usb.LIBUSB_ENDPOINT_OUT.toString(2));
+
 
 
 
