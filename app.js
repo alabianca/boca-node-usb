@@ -12,7 +12,7 @@ const printer = devices[0];
 
 
 
-printer.open();
+printer.open(false);
 
 printer.setConfiguration(1, (err) => {
     if (err) {
@@ -23,16 +23,18 @@ printer.setConfiguration(1, (err) => {
     const iface = printer.interfaces[0];
     iface.claim()
     const out = iface.endpoints.find((e) => e.direction === 'out');
-    const ein = iface.endpoints.find((e) => e.direction = 'in');
-
+    const ein = iface.endpoints.find((e) => e.direction === 'in');
+    
     if (out instanceof usb.OutEndpoint) {
+        console.log('transfer out')
         out.transfer(Buffer.from(testFgl), (err) => {
             if (err) {
                 console.log("OUT", err);
                 return
             }
-
+            console.log('out without error')
             if (ein instanceof usb.InEndpoint) {
+                console.log('transfer int')
                 ein.transfer(4054, (err) => {
                     if (err) {
                         console.log("IN", err);
